@@ -9,7 +9,11 @@ for file in os.listdir(path):
 
 
 class LineCounter:
-    
+    # Hidden Selections:
+    # RA: Read Allowed Extensions
+    # RP: Read Path
+    # D: Load default values
+
     def __init__(self):
         self.allowed_extensions = []
         self.path = ""
@@ -42,6 +46,10 @@ class LineCounter:
                 print(self.path)
             elif selection == "RA":
                 print(self.allowed_extensions)
+            elif selection == "D":
+                self.allowed_extensions = [".txt"]
+                self.path = "C:/Users/trevo/TkDocs/Misc/"
+                print("Defaults Loaded!")
             elif selection == 'E':
                 print("See ya!")
                 break
@@ -69,12 +77,17 @@ class LineCounter:
         self.allowed_extensions = allowed_extensions
     
     def countLines(self, file):
+        # Might only work in root folder
         if os.path.isdir(file):
             for f in os.listdir(file):
-                self.countLines(f)
+                self.countLines(self.path+"/"+f)
         else:
             if os.path.isfile(file):
+                print("Hey, Im a file!")
                 if file[file.index('.'):] in self.allowed_extensions:
                     with open(file) as open_file:
                         for line in open_file:
+                            print(line)
                             self.count+=1
+                else:
+                    print("Invalid file extension")
