@@ -2,17 +2,79 @@ import os
 # Enter path here
 path = "C:/Users/trevo/TkDocs/Code/secure-sight"
 accepted_extensions = [".js", ".ts", ".java", ".py", ".tsx", "."]
+
 for file in os.listdir(path):
     if os.path.isdir(file):
         print("Hello")
 
 
+class LineCounter:
+    
+    def __init__(self):
+        self.allowed_extensions = []
+        self.path = ""
+        self.count = 0
 
-def countLines(file):
-    count = 0
-    if os.path.isdir(file):
-        count += countLines(file)
-    else:
-        if os.path.isfile(file):
-            if file[file.index('.'):] in accepted_extensions:
-                print("Hello")
+    def start_dialog(self):
+        print("//////////////////////////////////")
+        print("//////Welcome To LineCounter//////")
+        print("//////////////////////////////////")
+
+        while True:
+            selection = input("Enter: P for Path A for Allowed Extensions, C to begin Counting or E to Exit\n")
+            selection = selection.upper()
+            if selection == 'P':
+                self.set_path() 
+            elif selection == 'A':
+                self.set_allowed()
+            elif selection == 'C':
+                if len(self.allowed_extensions) != 0:
+                    if len(self.path) != 0:
+                       print("Beginning Count...") # Count 
+                       self.countLines(self.path)
+                       print("Final Count: " + str(self.count))
+                    else: 
+                        print("Please use P to enter a valid path.")
+                        continue  
+                else:
+                    print("Please use A to enter valid allowed extensions")  
+            elif selection == "RP":
+                print(self.path)
+            elif selection == "RA":
+                print(self.allowed_extensions)
+            elif selection == 'E':
+                print("See ya!")
+                break
+            else:
+                print("Please Enter a Valid Selection")
+                print("Your selection: " + selection)
+
+
+    def set_path(self):
+        path = input("Please enter your file/folder path\n")
+        self.path = path
+
+    def set_allowed(self):
+        allowed_extensions = []
+        selection = ''
+        while selection != 'E':
+            selection = input("Enter a file extension to be included in the count\n")
+            if selection == 'E':
+                break
+            elif len(selection) == 0:
+                print("Please select a valid file extension")
+                continue
+            else:
+                allowed_extensions.append(selection)
+        self.allowed_extensions = allowed_extensions
+    
+    def countLines(self, file):
+        if os.path.isdir(file):
+            for f in os.listdir(file):
+                self.countLines(f)
+        else:
+            if os.path.isfile(file):
+                if file[file.index('.'):] in self.allowed_extensions:
+                    with open(file) as open_file:
+                        for line in open_file:
+                            self.count+=1
