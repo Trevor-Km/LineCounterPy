@@ -1,21 +1,14 @@
 import os
-# Enter path here
-path = "C:/Users/trevo/TkDocs/Code/secure-sight"
-accepted_extensions = [".js", ".ts", ".java", ".py", ".tsx", "."]
-
-for file in os.listdir(path):
-    if os.path.isdir(file):
-        print("Hello")
-
 
 class LineCounter:
     # Hidden Selections:
     # RA: Read Allowed Extensions
     # RP: Read Path
     # D: Load default values
-
+    # TODO: Add rankings based on project size
     def __init__(self):
         self.allowed_extensions = []
+        self.ignored_directories = ["node_modules"]
         self.path = ""
         self.count = 0
 
@@ -25,6 +18,7 @@ class LineCounter:
         print("//////////////////////////////////")
 
         while True:
+            self.count = 0
             selection = input("Enter: P for Path A for Allowed Extensions, C to begin Counting or E to Exit\n")
             selection = selection.upper()
             if selection == 'P':
@@ -36,7 +30,7 @@ class LineCounter:
                     if len(self.path) != 0:
                        print("Beginning Count...") # Count 
                        self.countLines(self.path)
-                       print("Final Count: " + str(self.count))
+                       print("Final Line Count: " + str(self.count))
                     else: 
                         print("Please use P to enter a valid path.")
                         continue  
@@ -47,8 +41,8 @@ class LineCounter:
             elif selection == "RA":
                 print(self.allowed_extensions)
             elif selection == "D":
-                self.allowed_extensions = [".txt"]
-                self.path = "C:/Users/trevo/TkDocs/Misc/"
+                self.allowed_extensions = [".tsx", ".java", ".ts", ".py"]
+                self.path = "C:/Users/trevo/TkDocs/Code/secure-sight"
                 print("Defaults Loaded!")
             elif selection == 'E':
                 print("See ya!")
@@ -66,13 +60,15 @@ class LineCounter:
         allowed_extensions = []
         selection = ''
         while selection != 'E':
-            selection = input("Enter a file extension to be included in the count\n")
-            if selection == 'E':
+            selection = input("Enter a file extension to be included in the count or E to exit\n")
+            if selection.capitalize() == 'E':
                 break
             elif len(selection) == 0:
                 print("Please select a valid file extension")
                 continue
             else:
+                if selection[0] != '.':
+                    selection = '.' + selection
                 allowed_extensions.append(selection)
         self.allowed_extensions = allowed_extensions
     
@@ -80,14 +76,14 @@ class LineCounter:
         # Might only work in root folder
         if os.path.isdir(file):
             for f in os.listdir(file):
-                self.countLines(self.path+"/"+f)
+                if f not in self.ignored_directories:
+                    self.countLines(file + '/' + f)
         else:
             if os.path.isfile(file):
-                print("Hey, Im a file!")
+                if '.' not in file:
+                    return
                 if file[file.index('.'):] in self.allowed_extensions:
+                    print(file)
                     with open(file) as open_file:
-                        for line in open_file:
-                            print(line)
+                        for i in open_file:
                             self.count+=1
-                else:
-                    print("Invalid file extension")
