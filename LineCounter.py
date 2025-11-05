@@ -5,16 +5,16 @@ class LineCounter:
     # RA: Read Allowed Extensions
     # RP: Read Path
     # D: Load default values
-    # TODO: Add rankings based on project size
     def __init__(self):
         self.allowed_extensions = []
         self.ignored_directories = ["node_modules"]
         self.path = ""
         self.count = 0
+        self.scale = ""
 
     def start_dialog(self):
         print("//////////////////////////////////")
-        print("//////Welcome To LineCounter//////")
+        print("//////Welcome To LineCounterPy//////")
         print("//////////////////////////////////")
 
         while True:
@@ -28,10 +28,23 @@ class LineCounter:
             elif selection == 'C':
                 if len(self.allowed_extensions) != 0:
                     if len(self.path) != 0:
-                       print("Beginning Count...") # Count 
+                       print("Beginning Count...")
                        self.countLines(self.path)
                        print("Final Line Count: " + str(self.count))
-                    else: 
+                       if self.count < 500:
+                           self.scale = "Tiny"
+                       elif self.count >= 500 and self.count < 2000:
+                           self.scale = "Small"
+                       elif self.count >= 1000 and self.count < 10000:
+                           self.scale = "Medium"
+                       elif self.count >= 10000 and self.count < 50000:
+                           self.scale = "Large"
+                       elif self.count >= 50000 and self.count < 250000:
+                           self.scale = "Very Large"
+                       elif self.count > 250000:
+                            self.scale = "Massive"
+                       print("You have a " + self.scale + " project!") 
+                    else:                  
                         print("Please use P to enter a valid path.")
                         continue  
                 else:
@@ -41,8 +54,8 @@ class LineCounter:
             elif selection == "RA":
                 print(self.allowed_extensions)
             elif selection == "D":
-                self.allowed_extensions = [".tsx", ".java", ".ts", ".py"]
-                self.path = "C:/Users/trevo/TkDocs/Code/secure-sight"
+                self.allowed_extensions = []
+                self.path = ""
                 print("Defaults Loaded!")
             elif selection == 'E':
                 print("See ya!")
