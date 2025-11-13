@@ -13,9 +13,9 @@ class LineCounter:
         self.scale = ""
 
     def start_dialog(self):
-        print("//////////////////////////////////")
+        print("////////////////////////////////////")
         print("//////Welcome To LineCounterPy//////")
-        print("//////////////////////////////////")
+        print("////////////////////////////////////")
 
         while True:
             self.count = 0
@@ -35,7 +35,7 @@ class LineCounter:
                            self.scale = "Tiny"
                        elif self.count >= 500 and self.count < 2000:
                            self.scale = "Small"
-                       elif self.count >= 1000 and self.count < 10000:
+                       elif self.count >= 2000 and self.count < 10000:
                            self.scale = "Medium"
                        elif self.count >= 10000 and self.count < 50000:
                            self.scale = "Large"
